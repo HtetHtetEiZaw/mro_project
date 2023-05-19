@@ -21,10 +21,11 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import {Card }from '@mui/material';
-
 import Image from 'next/image';
-import logo from 'images/logo.png';
-import userlogo from 'images/userlogo.jpg';
+import userlogo from 'images/user.jpg';
+
+import Avatar from '@mui/material/Avatar';
+
 
 import { fetcher } from '@/utils/fetcher';
 import { userFormSchema, UserFormData } from '../../formSchema/user';
@@ -34,23 +35,20 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import IconButton from '@mui/material/IconButton';
 
+import Slider from '@mui/material/Slider';
+import { useState, useRef } from "react";
+import AvatarEditor from "react-avatar-editor";
 
-function Copyright(props: any) {
-    return (
-      <Typography variant="body2" color="text.secondary" align="center" {...props}>
-        {'Copyright © '}
-        <Link color="inherit" href="https://mui.com/">
-          Your Website
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
-  }
-
-const theme = createTheme();
-
+const theme = createTheme({
+  palette: {
+    background: {
+      paper: '#dcddfc', // your color
+    },
+  },
+});
 export default function SignUpPage (){
+ 
+  const [url, setBlobUrl] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -64,6 +62,7 @@ export default function SignUpPage (){
   });
 
   const onSubmit = handleSubmit(async (formData) => {
+    console.log(formData)
     const response = await fetch('/api/user', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -71,43 +70,92 @@ export default function SignUpPage (){
     });
     if (response.ok) {
       const responseJSON = await response.json();
-      router.push('user/profile');
+      // router.push('user/profile');
       // router.push('user/');
 
     } else {
       // /setPostError('server error');
       setPostError('This user is already exist.');
     }
+    
   });
 
-  // const { data: employees, error: role_error } = useSWR<Prisma.EmployeesCreateInput[]>('/api/employee', fetcher);
-  // const { data: departments, error: department_error } = useSWR<Prisma.DepartmentCreateInput[]>(
-  //   '/api/department',
-  //   fetcher
-  // );
+  var editor = "";
+  const [picture, setPicture] = useState({
+    cropperOpen: false,
+    img: null,
+    zoom: 2,
+    croppedImg:
+      "https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png"
+  });
+
+  const handleSlider = (event:any, value:any) => {
+    setPicture({
+      ...picture,
+      zoom: value
+    });
+  };
+
+  const handleCancel = () => {
+    setPicture({
+      ...picture,
+      cropperOpen: false
+    });
+  };
+
+  const setEditorRef = (ed:any) => {
+    editor = ed;
+  };
+
+  const handleSave = (e:any) => {
+    if (setEditorRef) {
+      const canvasScaled = editor.getImageScaledToCanvas();
+      const croppedImg = canvasScaled.toDataURL();
+
+      setPicture({
+        ...picture,
+        img: null,
+        cropperOpen: false,
+        croppedImg: croppedImg
+      });
+    }
+  };
+
+  const handleFileChange = (e:any) => {
+    const url = URL.createObjectURL(e.target.files[0]);
+    console.log(url);
+    setPicture({
+      ...picture,
+      img: url,
+      cropperOpen: true
+    });
+    setBlobUrl(url);
+  }
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+    　
+
+      <ThemeProvider theme={theme}  >
+      <Container component="main" maxWidth="md" 
+      style={{backgroundColor: "#e8e6e6"}}
+      sx={{ mt: -1 ,mb:-1}} 
+      >
+
       <Box
           sx={{
-            marginTop: 8,
+            // marginTop: 1,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
-        >
-          {/* <Image src={logo} 
-           width={100}
-           height={30} alt="logo"/> */}
-
-        <Card variant="outlined" sx={{ mt: 2 }} >
+      >
+     
+        {/* <Card variant="outlined" sx={{ mt: 2 }} style={{backgroundColor: "#e8e6e6"}} > */}
          
           <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 3,mb:3,mr:5,ml:5 }}>
            <span className='error' style={{color: "#ff0000"}} >{postError}</span>
            
-           {/* <AccountCircleOutlinedIcon sx={{ mt: 3,mb:3,mr:5,ml:5 }}/> */}
            <Box
               sx={{
                 // marginTop: 3,
@@ -116,13 +164,50 @@ export default function SignUpPage (){
                 alignItems: 'center',
               }}
             >
-              <Image src={userlogo} 
+
+            {picture.cropperOpen && (
+          <Box display="block">
+            <AvatarEditor
+              ref={setEditorRef}
+              image={picture.img}
+              width={200}
+              height={200}
+              border={50}
+              color={[255, 255, 255, 0.6]} // RGBA
+              rotate={0}
+              scale={picture.zoom}
+            />
+            <Slider
+              aria-label="raceSlider"
+              value={picture.zoom}
+              min={1}
+              max={10}
+              step={0.1}
+              onChange={handleSlider}
+            ></Slider>
+            <Box>
+              <Button variant="contained" onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Button onClick={handleSave}>Save</Button>
+            </Box>
+          </Box>
+            )}
+
+              {/* <Image src={userlogo} 
               width={100}
-              height={30} alt="userlogo"/>
-              <IconButton color="primary" aria-label="upload picture" component="label" sx={{ mt:-4,ml:6}}>
-                 <input hidden accept="image/*" type="file" />
+              height={100} alt="user" /> */}
+              <Avatar alt="Avatar"   src={picture.croppedImg} 
+              style={{ width: "30%", height: "auto", padding: "5" }}/>
+              {/* <AccountCircleOutlinedIcon sx={{ mt: 3,mb:3,mr:5,ml:5 }} fontSize="large"/> */}
+              <IconButton color="primary" aria-label="upload picture" component="label" sx={{ mt:-4,ml:10}} style={{backgroundColor: "#e3e3e3"}}>
+                 {/* <input hidden accept="image/*" type="file" /> */}
+                 <input hidden type="file" accept="image/*"  onChange={handleFileChange} name="image" />
+                 {/* {blobUrl && <input type="hidden"  value={blobUrl} />} */}
                  <ModeEditOutlineOutlinedIcon />
               </IconButton>
+          
+
           </Box>
            
            <InputLabel >名前</InputLabel>
@@ -134,7 +219,7 @@ export default function SignUpPage (){
               error={'name' in errors}
               helperText={errors.name?.message}
               {...register('name')}
-             style={{color: "#ffffff"}}
+             style={{backgroundColor: "#ffffff"}}
             />
           <InputLabel >メール</InputLabel>
             <TextField
@@ -145,8 +230,7 @@ export default function SignUpPage (){
               error={'email' in errors}
               helperText={errors.email?.message}
               {...register('email')}
-            
-              style={{color: "#ffffff"}}
+              style={{backgroundColor: "#ffffff"}}
             />
             <InputLabel >パスワード</InputLabel>
             <TextField
@@ -157,22 +241,22 @@ export default function SignUpPage (){
               required
               error={'password' in errors}
               helperText={errors.password?.message}
-            {...register('password')}
+              {...register('password')}
+              style={{backgroundColor: "#ffffff"}}
             />
            
-            <Button style={{backgroundColor: "#0000ff"}}
+            <Button style={{backgroundColor: "#190e47"}}
               type="submit" 
               fullWidth
               variant="contained" color="primary"
               sx={{ mt: 3, mb: 2 }}
             >
-             ログイン
+             登録する
             </Button>
           
            </Box>
-        </Card>
+        {/* </Card> */}
       </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
     </>

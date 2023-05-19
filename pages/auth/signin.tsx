@@ -12,26 +12,33 @@ import { signIn } from "next-auth/react";
 
 import Image from 'next/image';
 import logo from 'images/logo.png';
+import Link from '@mui/material/Link';
 
-import Link from 'next/link';
+// import Link from 'next/link';
 
 import { useRouter} from 'next/router';
 import { ChangeEvent, useState } from "react";
 
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+// function Copyright(props: any) {
+//   return (
+//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
+//       {'Copyright © '}
+//       <Link color="inherit" href="https://mui.com/">
+//         Your Website
+//       </Link>{' '}
+//       {new Date().getFullYear()}
+//       {'.'}
+//     </Typography>
+//   );
+// }
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    background: {
+      paper: '#dcddfc',
+    },
+  },
+});
 
 export default function SignIn() {
   const router = useRouter();
@@ -94,7 +101,7 @@ export default function SignIn() {
   return (
     <>
      <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" >
         {/* <CssBaseline /> */}
       <Box
           sx={{
@@ -110,13 +117,13 @@ export default function SignIn() {
           
           {/* <Typography component="h1" variant="h5">
             Sign in
-          </Typography> style={{backgroundColor: "#CFECEC"}}*/}
+          </Typography> style={{backgroundColor: "#c0e0fc"}}*/}
           <Image src={logo} 
            width={100}
-           height={30} alt="logo"/>
+           height={100} alt="logo"/>
 
-        <Card variant="outlined" sx={{ mt: 2 }} >
-          <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 3,mb:3,mr:5,ml:5 }}>
+        <Card variant="outlined" sx={{ mt: 2 }}  >
+          <Box component="form" onSubmit={onSubmit} noValidate sx={{ mt: 3,mb:3,mr:5,ml:5 }} >
           {error && (
             <p className="text-center bg-red-300 py-3 mb-6 rounded">{error}</p>
           )}
@@ -130,7 +137,7 @@ export default function SignIn() {
               name="email"
               value={formValues.email}
               onChange={handleChange}
-              style={{color: "#ffffff"}}
+              style={{backgroundColor: "#ffffff"}}
             />
             <InputLabel >パスワード</InputLabel>
             <TextField
@@ -143,12 +150,13 @@ export default function SignIn() {
               id="password"
               value={formValues.password}
               onChange={handleChange}
+              style={{backgroundColor: "#ffffff"}}
             />
             {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
-            <Button style={{backgroundColor: "#0000ff"}}
+            <Button style={{backgroundColor: "#190e47"}}
               type="submit" 
               fullWidth
               variant="contained" color="primary"
@@ -171,12 +179,12 @@ export default function SignIn() {
                  }}
               </Grid> */}
               <Grid item >
-                <Link href='/auth/signup'>
+                <Link href='/auth/signup' underline="none">
                   {"アカウント作成する"}
                 </Link>
               </Grid>
       </Grid>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
       </Container>
     </ThemeProvider>
     </>

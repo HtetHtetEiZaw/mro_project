@@ -3,6 +3,29 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { User } from "@prisma/client";
 import { prisma } from "@/utils/prismaSingleton";
 
+import multer from 'multer';
+import path from 'path';
+
+export const config = {
+  api: {
+    bodyParser: false, // disable automatic body parsing
+  },
+};
+
+// const storage = multer.diskStorage({
+//   destination: 'uploads/', // specify the directory to save the uploaded files
+//   filename: (req, file, cb) => {
+//     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+//     const fileExtension = path.extname(file.originalname);
+//     const fileName = file.fieldname + '-' + uniqueSuffix + fileExtension;
+//     cb(null, fileName);
+//   },
+// });
+
+// const upload = multer({ storage });
+
+
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -22,6 +45,7 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse<User[]>) => {
     },
   });
   res.status(200).json(users);
+  // console.log(res);
 };
 
 const handlePost = async (req: NextApiRequest, res: NextApiResponse<User>) => {

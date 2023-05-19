@@ -42,7 +42,7 @@ model User {
   email    String @unique
   emailVerified DateTime?
   password   String
-  image         String?
+  imageUrl   String
   accounts      Account[]
   sessions      Session[]
 }

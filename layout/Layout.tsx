@@ -20,7 +20,7 @@ import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainMenu, secondaryMenu } from "./Menu";
+import { mainMenu } from "./Menu";
 import AccountInfo from "./AccountInfo";
 /*
 import Chart from "./Chart";
@@ -97,6 +97,11 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const mdTheme = createTheme({
+  palette: {
+    background: {
+      paper: '#e8e6e6',
+    },
+  },
   /*
   palette: {
     mode: "light",
@@ -123,7 +128,7 @@ export default function Layout({ children }: LayoutProps) {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open}>
+        <AppBar position="absolute" open={open} >
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
@@ -148,14 +153,14 @@ export default function Layout({ children }: LayoutProps) {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              ThanksCard
+              Mro Practice
             </Typography>
             <AccountInfo />
-            <IconButton color="inherit">
+            {/* <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -175,7 +180,7 @@ export default function Layout({ children }: LayoutProps) {
           <List component="nav">
             {mainMenu}
             <Divider sx={{ my: 1 }} />
-            {secondaryMenu}
+            {/* {secondaryMenu} */}
           </List>
         </Drawer>
         <Box

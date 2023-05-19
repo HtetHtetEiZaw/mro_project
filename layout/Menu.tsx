@@ -13,14 +13,14 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 
 export const mainMenu = (
   <React.Fragment>
-    <Link href="/" passHref>
+    {/* <Link href="/" passHref>
       <ListItemButton>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="ThanksCard" />
       </ListItemButton>
-    </Link>
+    </Link> */}
     <Link href="/user" passHref>
       <ListItemButton>
         <ListItemIcon>
@@ -44,28 +44,28 @@ export const mainMenu = (
   </React.Fragment>
 );
 
-export const secondaryMenu = (
-  <React.Fragment>
-    <ListSubheader component="div" inset>
-      Saved reports
-    </ListSubheader>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Current month" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last quarter" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
-    </ListItemButton>
-  </React.Fragment>
-);
+// export const secondaryMenu = (
+//   <React.Fragment>
+//     <ListSubheader component="div" inset>
+//       Saved reports
+//     </ListSubheader>
+//     <ListItemButton>
+//       <ListItemIcon>
+//         <AssignmentIcon />
+//       </ListItemIcon>
+//       <ListItemText primary="Current month" />
+//     </ListItemButton>
+//     <ListItemButton>
+//       <ListItemIcon>
+//         <AssignmentIcon />
+//       </ListItemIcon>
+//       <ListItemText primary="Last quarter" />
+//     </ListItemButton>
+//     <ListItemButton>
+//       <ListItemIcon>
+//         <AssignmentIcon />
+//       </ListItemIcon>
+//       <ListItemText primary="Year-end sale" />
+//     </ListItemButton>
+//   </React.Fragment>
+// );
