@@ -24,6 +24,7 @@
     "autoprefixer": "10.4.14",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.1",
+    "fs-extra": "^11.1.1",
     "multer": "^1.4.5-lts.1",
     "next": "13.4.1",
     "next-auth": "^4.22.1",
@@ -39,6 +40,7 @@
     "yup": "^1.1.1"
   },
   "devDependencies": {
+    "@types/fs-extra": "^11.0.1",
     "@types/multer": "^1.4.7",
     "@types/react-avatar-editor": "^13.0.0",
     "eslint-config-prettier": "^8.8.0",

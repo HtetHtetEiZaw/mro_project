@@ -1,5 +1,57 @@
 import * as yup from "yup";
 
+// export const userFormSchema = yup.object().shape({
+//   name:  yup
+//   .string().nullable()
+//   .required('Name is a required field'),
+//   email: yup
+//     .string()
+//     .email("Invalid mail format.")
+//     .required("Email is a required field"),
+//   password: yup.string().min(4).required("password is a required field"),
+//   imageUrl: yup.mixed<string>().required('Image is required'),
+  // imageUrl: yup
+  //   .mixed<string>()
+  //   .test('isImage', 'Invalid image format', (value) => {
+  //     if (!value) {
+  //       return true; // Allow empty value
+  //     }
+  //     const supportedFormats = ['image/jpeg', 'image/png', 'image/gif'];
+  //     return supportedFormats.includes(value.type);
+  //   })
+  //   .required('Image is required'),
+// });
+
+export const userFormSchema = yup
+  .object({
+    name:  yup
+    .string().nullable()
+    .required('Name is a required field'),
+    email: yup
+      .string()
+      .email("Invalid mail format.")
+      .required("Email is a required field"),
+    password: yup.string().min(4).required("password is a required field"),
+    // employeeID: yup.string().required(),
+    // departmentId: yup.string().required(),
+    imageUrl:yup.string()
+    // .mixed<File>()
+    // .required("Please select an image")
+  }) 
+  .required()
+
+ export type UserFormData = yup.InferType<typeof userFormSchema>;
+
+// Same as...
+
+// export type UserFormData = {
+//   name: string ;
+//   email: string;
+//   password: string;
+//   // employeeID: string;
+//   // departmentId: string;
+//   imageUrl: string;
+// };
 
 // export const userFormSchema = yup
 //   .object({
@@ -66,42 +118,3 @@ import * as yup from "yup";
 //       .test("is-valid-size", "Max allowed size is 100KB",
 //         value => value && value.size <= MAX_FILE_SIZE)
 // });
-
-
-
-export const userFormSchema = yup.object().shape({
-  name:  yup
-  .string().nullable()
-  .required('Name is a required field'),
-  email: yup
-    .string()
-    .email("Invalid mail format.")
-    .required("Email is a required field"),
-  password: yup.string().min(4).required("password is a required field"),
-  imageUrl: yup
-    .mixed<string>()
-    .test('isImage', 'Invalid image format', (value) => {
-      if (!value) {
-        return true; // Allow empty value
-      }
-      const supportedFormats = ['image/jpeg', 'image/png', 'image/gif'];
-      return supportedFormats.includes(value.type);
-    })
-    .required('Image is required'),
-});
-
-
-
-export type UserFormData = yup.InferType<typeof userFormSchema>;
-
-// Same as...
-/*
-type UserFormData = {
-  name: string | null | undefined;
-  email: string;
-  password: string;
-  employeeID: string;
-  departmentId: string;
-  image :String
-};
-*/

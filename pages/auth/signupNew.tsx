@@ -45,19 +45,8 @@ const theme = createTheme({
 export default function SignUpPage (){
   const router = useRouter();
   const [postError, setPostError] = React.useState<string>();
-  // const [url, setBlobUrl] = useState<string | null>(null);
-  // const [imageFile, setImageFile] = useState<File | null>(null);
-
-  // const [selectedImage, setSelectedImage] = useState(null);
-  //  const [imageUrl, setImageUrl] =  useState<File | null>(null);
-
-  // useEffect(() => {
-  //   if (selectedImage) {
-  //     setImageUrl(URL.createObjectURL(selectedImage));
-  //   }
-  // }, [selectedImage]);
-
-  const [selectedFile, setSelectedFile] = useState<File |  Blob>();
+//   const [selectedFile, setSelectedFile] = useState<File |  Blob>();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const editorRef = useRef<AvatarEditor | null>(null);
   const [picture, setPicture] = useState<PictureState>({
@@ -94,8 +83,6 @@ export default function SignUpPage (){
         croppedImg,
       });
     }
-    // const imageFile = event.target.files?.[0];
-    // setSelectedFile(imageFile);
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -107,19 +94,7 @@ export default function SignUpPage (){
         cropperOpen: true,
       });
       setSelectedFile(event.target.files[0]);
-    }
-    // const file = event.target.files?.[0];
-    // if (file) {
-    //   const url = URL.createObjectURL(file);
-    //   // console.log(url);
-    //   setPicture({
-    //     ...picture,
-    //     img: url,
-    //     cropperOpen: true,
-    //   });
-    // }
-  //  console.log(file);
-   
+    } 
   };
 
   const {
@@ -131,91 +106,37 @@ export default function SignUpPage (){
   });
 
   
- 
-
-
   const onSubmit = handleSubmit(async (formData) => {
-  //  const{name,email,password,imageUrl}=formData;
-  //  if (!selectedFile) return;
-  //  const formDataUpdate=new FormData();
-  //   formDataUpdate.append('name', name);
-  //   formDataUpdate.append('email', email);
-  //   formDataUpdate.append('password', password);
-  //   formDataUpdate.append('imageUrl', selectedFile);
+    const data = new FormData();
+	data.append('selectedFile', selectedFile);
 
-  // const fileInput = document.getElementById('fileInput')as HTMLInputElement;;
-  // // console.log(fileInput.files?.[0]);
-  // // Get the selected file from the file input element
-  // const selectedFileInput = fileInput.files?.[0];
-  // formData.imageUrl=selectedFile;
-  //  console.log(selectedFile);
-// const file=selectedFile;
-
-// const newformData = new FormData();
-// newformData.append('name', name);
-// newformData.append('email', email);
-// newformData.append('password', password);
-// newformData.append('imageUrl', selectedFile);
-  //  console.log(newformData);
-
-// const requestBody = JSON.stringify({
-//   name: newformData.get('name'),
-//   email: newformData.get('email'),
-//   password: newformData.get('password'),
-//   imageUrl:selectedFile
-// });
-
-// console.log(requestBody);
-
-  // console.log(setSelectedFile);
-
-   const newformData={
-    name:formData.name,
-    email:formData.email,
-    password:formData.password,
-    imageUrl:selectedFile
-   }
-  //  console.log()
-  console.log(newformData);
-    // if (!selectedFile) return;
-    // formData.imageUrl=selectedFile;
-    // const formDataToSend = new FormData();
-    // const=formData;
-    // formDataToSend.append("name", name);
-    // formDataToSend.append("email", email);
-    // formDataToSend.append("password", password);
-    // formDataToSend.append('imageUrl', selectedFile);
-      // formData.append("imageUrl", selectedFile);
-    // formData=formDataToSend;
-       
-    // const { imageUrl } = formData;
-    //  if (!selectedFile) return;
-    // const formData= new FormData();
-    // formData.append('name', name);
-    // formData.append('email', email);
-    // formData.append('password', password);
-    // formData.append('imageUrl', selectedFile);
-    // formDataToSend.append("imageUrl", imageUrl[0]);
-  //  console.log(formDataToSend);
-
-  //  const fileObject = JSON.parse(imageUrl); // Parse the string to convert it back to an object
-  //  const fileName = fileObject.name; // Retrieve the name property
-
-  //  const fileName = imageUrl.split('"')[1];
-
-  // const newformData = new FormData();
-  // newformData.append('name', formData.name);
-  // newformData.append('email', formData.email);
-  // newformData.append('password', formData.password);
-  // newformData.append('imageUrl', selectedFile);
-//   const fileObject = newformData.imageUrl;
-//  console.log(fileObject);
+    let filename = null;
+				if(selectedFile) {
+					try {
+						const res = await fetch('/api/upload/multer', {
+							method: 'POST',
+							body: data,
+						});
+			
+						if (res.ok) {
+							const responseJson = await res.json();
+							if(responseJson) {
+								// setFileName(responseJson.filename);
+								 filename =  responseJson.filename;
+							}
+						} else {
+							console.error('File upload failed:', res.status);
+						}
+					} catch (error) {
+						console.error('File upload failed:', error);
+					}	
+   			}
 
     const response = await fetch('/api/user', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       // headers: { 'Content-Type': ' multipart/form-data' },
-      body: JSON.stringify(newformData),
+      body: JSON.stringify(formData),
      // body:newformData,
     });
     //  console.log(response);
