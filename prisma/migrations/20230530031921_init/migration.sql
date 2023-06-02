@@ -31,7 +31,8 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "emailVerified" DATETIME,
     "password" TEXT NOT NULL,
-    "imageUrl" TEXT NOT NULL
+    "imageUrl" TEXT,
+    "imageData" TEXT
 );
 
 -- CreateTable

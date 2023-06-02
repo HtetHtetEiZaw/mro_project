@@ -1,3 +1,4 @@
+import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -12,91 +13,32 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { fetcher } from '@/utils/fetcher';
 import { userFormSchema, UserFormData } from '../../formSchema/user';
-// import Link from 'next/link';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import IconButton from '@mui/material/IconButton';
-// import Slider from '@mui/material/Slider';
-// import { useState, useEffect } from "react";
-// import AvatarEditor from "react-avatar-editor";
-
-// import { ChangeEvent } from 'react';
-
-import { ChangeEvent, useState, useRef } from 'react';
+import { ChangeEvent, useState, useRef,useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
-import Slider from '@mui/material/Slider';
-import AvatarEditor from 'react-avatar-editor';
+import AvatarEditor from '../component/avatarEditor';
 
-interface PictureState {
-  cropperOpen: boolean;
-  img: string | null;
-  zoom: number;
-  croppedImg: string;
-}
+import { signIn } from "next-auth/react";
 
 const theme = createTheme({
   palette: {
     background: {
-      paper: '#dcddfc', // your color
+      paper: '#dcddfc', 
     },
   },
 });
-
-export default function SignUpPage (){
+const SignUpPage: NextPage = () => {
   const router = useRouter();
-  const [postError, setPostError] = React.useState<string>();
-  // const [url, setBlobUrl] = useState<string | null>(null);
-  // const [imageFile, setImageFile] = useState<File | null>(null);
-
-  // const [selectedImage, setSelectedImage] = useState(null);
-  //  const [imageUrl, setImageUrl] =  useState<File | null>(null);
-
-  // useEffect(() => {
-  //   if (selectedImage) {
-  //     setImageUrl(URL.createObjectURL(selectedImage));
-  //   }
-  // }, [selectedImage]);
-
-  const [selectedFile, setSelectedFile] = useState<File |  Blob>();
-
-  const editorRef = useRef<AvatarEditor | null>(null);
-  const [picture, setPicture] = useState<PictureState>({
+  const [picture, setPicture] = useState({
     cropperOpen: false,
-    img: null,
+    img: '',
     zoom: 2,
-    croppedImg:
-      'https://upload.wikimedia.org/wikipedia/commons/0/09/Man_Silhouette.png',
+    croppedImg: '',
   });
-
-  const handleSlider = (event: Event, value: number | number[]) => {
-    setPicture({
-      ...picture,
-      zoom: value as number,
-    });
-  };
-
-  const handleCancel = () => {
-    setPicture({
-      ...picture,
-      cropperOpen: false,
-    });
-  };
-
-  const handleSave = () => {
-    if (editorRef.current) {
-      const canvasScaled = editorRef.current.getImageScaledToCanvas();
-      const croppedImg = canvasScaled.toDataURL();
-
-      setPicture({
-        ...picture,
-        img: null,
-        cropperOpen: false,
-        croppedImg,
-      });
-    }
-    // const imageFile = event.target.files?.[0];
-    // setSelectedFile(imageFile);
-  };
+  const [postError, setPostError] = React.useState<string>();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if(event.target.files && event.target.files.length>0){
@@ -107,20 +49,8 @@ export default function SignUpPage (){
         cropperOpen: true,
       });
       setSelectedFile(event.target.files[0]);
-    }
-    // const file = event.target.files?.[0];
-    // if (file) {
-    //   const url = URL.createObjectURL(file);
-    //   // console.log(url);
-    //   setPicture({
-    //     ...picture,
-    //     img: url,
-    //     cropperOpen: true,
-    //   });
-    // }
-  //  console.log(file);
-   
-  };
+    }   
+  }
 
   const {
     register,
@@ -130,118 +60,63 @@ export default function SignUpPage (){
      resolver: yupResolver(userFormSchema),
   });
 
-  
- 
-
-
   const onSubmit = handleSubmit(async (formData) => {
-  //  const{name,email,password,imageUrl}=formData;
-  //  if (!selectedFile) return;
-  //  const formDataUpdate=new FormData();
-  //   formDataUpdate.append('name', name);
-  //   formDataUpdate.append('email', email);
-  //   formDataUpdate.append('password', password);
-  //   formDataUpdate.append('imageUrl', selectedFile);
-
-  // const fileInput = document.getElementById('fileInput')as HTMLInputElement;;
-  // // console.log(fileInput.files?.[0]);
-  // // Get the selected file from the file input element
-  // const selectedFileInput = fileInput.files?.[0];
-  // formData.imageUrl=selectedFile;
-  //  console.log(selectedFile);
-// const file=selectedFile;
-
-// const newformData = new FormData();
-// newformData.append('name', name);
-// newformData.append('email', email);
-// newformData.append('password', password);
-// newformData.append('imageUrl', selectedFile);
-  //  console.log(newformData);
-
-// const requestBody = JSON.stringify({
-//   name: newformData.get('name'),
-//   email: newformData.get('email'),
-//   password: newformData.get('password'),
-//   imageUrl:selectedFile
-// });
-
-// console.log(requestBody);
-
-  // console.log(setSelectedFile);
-
-   const newformData={
-    name:formData.name,
-    email:formData.email,
-    password:formData.password,
-    imageUrl:selectedFile
-   }
-  //  console.log()
-  console.log(newformData);
-    // if (!selectedFile) return;
-    // formData.imageUrl=selectedFile;
-    // const formDataToSend = new FormData();
-    // const=formData;
-    // formDataToSend.append("name", name);
-    // formDataToSend.append("email", email);
-    // formDataToSend.append("password", password);
-    // formDataToSend.append('imageUrl', selectedFile);
-      // formData.append("imageUrl", selectedFile);
-    // formData=formDataToSend;
+      if (selectedFile !== null) {
+          const data = new FormData();
+          data.append('selectedFile', selectedFile);
+					try {
+						const res = await fetch('/api/upload/multer', {
+							method: 'POST',
+							body: data,
+						});
+						if (res.ok) {
+							const responseJson = await res.json();
+							if(responseJson) {
+                  formData.imageUrl=  responseJson.filename;
+							}
+						} else {
+							console.error('File upload failed:', res.status);
+						}
+					} catch (error) {
+						console.error('File upload failed:', error);
+					}	
+   		}
        
-    // const { imageUrl } = formData;
-    //  if (!selectedFile) return;
-    // const formData= new FormData();
-    // formData.append('name', name);
-    // formData.append('email', email);
-    // formData.append('password', password);
-    // formData.append('imageUrl', selectedFile);
-    // formDataToSend.append("imageUrl", imageUrl[0]);
-  //  console.log(formDataToSend);
+        formData.imageData=picture.croppedImg;
+     
+        const response = await fetch('/api/user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+        if (response.ok) {
+          const responseJSON= await response.json();
+          const userId=responseJSON.id;
+          const result = await signIn('credentials', {
+            redirect: false,
+            email: formData.email,
+            password: formData.password,
+          });
+          if (result?.ok) {
+            router.push({
+              pathname: '/profile/[userId]',
+              query: { userId },
+            });
+          }
 
-  //  const fileObject = JSON.parse(imageUrl); // Parse the string to convert it back to an object
-  //  const fileName = fileObject.name; // Retrieve the name property
-
-  //  const fileName = imageUrl.split('"')[1];
-
-  // const newformData = new FormData();
-  // newformData.append('name', formData.name);
-  // newformData.append('email', formData.email);
-  // newformData.append('password', formData.password);
-  // newformData.append('imageUrl', selectedFile);
-//   const fileObject = newformData.imageUrl;
-//  console.log(fileObject);
-
-    const response = await fetch('/api/user', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      // headers: { 'Content-Type': ' multipart/form-data' },
-      body: JSON.stringify(newformData),
-     // body:newformData,
-    });
-    //  console.log(response);
-    if (response.ok) {
-      const responseJSON = await response.json();
-      console.log(responseJSON);
-      router.push('user/profile');
-      // router.push('user/');
-
-    } else {
-      // /setPostError('server error');
-      setPostError('This user is already exist.');
-    }
-    
+        } else {
+          // /setPostError('server error');
+          setPostError('This user is already exist.');
+        }      
   });
 
   return (
-    <>
-    　
-
-      <ThemeProvider theme={theme}  >
-      <Container component="main" maxWidth="md" 
+   <>
+    <ThemeProvider theme={theme}  >
+     <Container component="main" maxWidth="md" 
       style={{backgroundColor: "#e8e6e6"}}
-      sx={{ mt: -1 ,mb:-1}} 
+      sx={{ mt:2}} 
       >
-
       <Box
           sx={{
             // marginTop: 1,
@@ -251,8 +126,6 @@ export default function SignUpPage (){
           }}
       >
      
-        {/* <Card variant="outlined" sx={{ mt: 2 }} style={{backgroundColor: "#e8e6e6"}} > */}
-         
           <Box component="form" onSubmit={onSubmit}  noValidate sx={{ mt: 3,mb:3,mr:5,ml:5 }} >
            <span className='error' style={{color: "#ff0000"}} >{postError}</span>
            
@@ -264,65 +137,46 @@ export default function SignUpPage (){
                 alignItems: 'center',
               }}
             >
-
-            {picture.cropperOpen && (
-          <Box display="block">
-            <AvatarEditor
-              ref={editorRef}
-              image={picture.img}
-              width={200}
-              height={200}
-              border={50}
-              color={[255, 255, 255, 0.6]} // RGBA
-              rotate={0}
-              scale={picture.zoom}
-            />
-            <Slider
-              aria-label="raceSlider"
-              value={picture.zoom}
-              min={1}
-              max={10}
-              step={0.1}
-              onChange={handleSlider}
-            ></Slider>
-            <Box>
-              <Button variant="contained" onClick={handleCancel}>
-                Cancel
-              </Button>
-              <Button onClick={handleSave}>Save</Button>
-            </Box>
-          </Box>
-            )}
-
-              {/* <Image src={userlogo} 
-              width={100}
-              height={100} alt="user" /> */} 
-              <Avatar alt="Avatar"   src={picture.croppedImg} 
-              style={{ width: "30%", height: "auto", padding: "5" }}/>
-              {/* <AccountCircleOutlinedIcon sx={{ mt: 3,mb:3,mr:5,ml:5 }} fontSize="large"/> */}
-              <IconButton color="primary" aria-label="upload picture" component="label" sx={{ mt:-4,ml:10}} style={{backgroundColor: "#e3e3e3"}}>
-                {/* <input hidden accept="image/*" type="file" /> */}
-                 <input hidden type="file" accept="image/*" {...register('imageUrl')}  onChange={handleFileChange}  id="imageUrl"
-              /> 
-                 <ModeEditOutlineOutlinedIcon /> 
-              </IconButton>
-          
+                {picture.cropperOpen ? (
+                                        <Box display='block'>
+                                            <AvatarEditor
+                                               picture={picture}
+                                               setPicture={setPicture}
+                                               image={picture.img}
+                                               scale={picture.zoom}
+                                            />
+                                        </Box>) : (
+                                        <>
+                                        {picture.croppedImg ? (
+                                                <Avatar
+                                                    src={picture.croppedImg}
+                                                    sx={{
+                                                        display: 'block',
+                                                        width: '5em',
+                                                        height: '5em',
+                                                    }}/>
+                                            ) : (
+                                                <AccountCircleOutlinedIcon
+                                                    sx={{
+                                                        bgcolor: '#c5cae9',
+                                                        color: '#1a237e',
+                                                        borderRadius: '50%',
+                                                        width: '5em',
+                                                        height: '5em',
+                                                        fontSize: '1.3em',
+                                                    }}/>
+                                            )}
+                                            <IconButton
+                                               color="primary" aria-label="upload picture" 
+                                               component="label" sx={{ mt:-4,ml:10}} style={{backgroundColor: "#e3e3e3"}}>
+                                                <input hidden type="file" accept="image/*" 
+                                                 {...register('imageUrl')}  onChange={handleFileChange}  id="imageUrl" /> 
+                                                <ModeEditOutlineOutlinedIcon  /> 
+                                            </IconButton>
+                                        </>
+                  )}
 
           </Box>
-
-          {/* <input type="file" accept="image/*" {...register('imageUrl')}  onChange={handleFileChange} id="imageUrl"   name="imageUrl"/> */}
-          {/* <input accept="image/*" type="file" id="select-image"
-          style={{ display: "none" }} onChange={handleFileChange}/> */}
-
-          {/* {imageUrl && selectedImage && (
-        <Box mt={2} textAlign="center">
-          <div>Image Preview:</div> */}
-          {/* <img src={imageUrl} alt={selectedImage.name} height="100px" /> */}
-          {/* <Avatar alt="Avatar"   src={imageUrl} 
-              style={{ width: "30%", height: "auto", padding: "5" }}/>
-        </Box>
-      )} */}
-      
 
            <InputLabel >名前</InputLabel>
             <TextField
@@ -362,17 +216,17 @@ export default function SignUpPage (){
               type="submit" 
               fullWidth
               variant="contained" color="primary"
-              sx={{ mt: 3, mb: 2 }}
-            >
+              sx={{ mt: 3, mb: 2 }} >
              登録する
             </Button>
           
-           </Box>
-        {/* </Card> */}
+          </Box>
       </Box>
-      </Container>
+     </Container>
     </ThemeProvider>
-    </>
+   </>
   );
-}
+};
+
+export default SignUpPage;
 

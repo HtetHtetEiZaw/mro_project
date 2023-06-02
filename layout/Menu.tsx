@@ -10,6 +10,15 @@ import PeopleIcon from "@mui/icons-material/People";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import LayersIcon from "@mui/icons-material/Layers";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import Button from "@mui/material/Button";
+import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction"
+import IconButton from "@mui/material/IconButton"
+import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
+import CircleIcon from '@mui/icons-material/Circle';
+import ChangeHistoryIcon from '@mui/icons-material/ChangeHistory';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import PentagonIcon from '@mui/icons-material/Pentagon';
+
 
 export const mainMenu = (
   <React.Fragment>
@@ -21,25 +30,52 @@ export const mainMenu = (
         <ListItemText primary="ThanksCard" />
       </ListItemButton>
     </Link> */}
-    <Link href="/user" passHref>
-      <ListItemButton>
+    {/* <Link href="/user" passHref> */}
+      <ListItemButton >
         <ListItemIcon>
-          <PeopleIcon />
+          {/* <PeopleIcon /> */}
+          <AccountBoxRoundedIcon color="primary" />
         </ListItemIcon>
-        <ListItemText primary="User" />
+        {/* <ListItemText primary="新規ユーザー登録" /> */}
+        <ListItemText primary={
+            <>
+              新規ユーザー登録 <br />
+              <Link href="/employee/create" passHref>
+              <Button color="primary" 
+                    type="submit" 
+                    variant="contained"  
+                    sx={{pl:5,pr:5,borderRadius: '30px', }}
+                  >
+                  ユーザー登録
+            </Button>
+            </Link>
+            </>
+          } />
       </ListItemButton>
-    </Link>
+    {/* </Link> */}
     <ListItemButton>
       <ListItemIcon>
-        <BarChartIcon />
+        <CircleIcon />
       </ListItemIcon>
-      <ListItemText primary="Reports" />
+      <ListItemText primary="機能一覧" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <LayersIcon />
+        <ChangeHistoryIcon />
       </ListItemIcon>
-      <ListItemText primary="Integrations" />
+      <ListItemText primary="Label" />
+    </ListItemButton>
+    <ListItemButton>
+      <ListItemIcon>
+      <CheckBoxOutlineBlankIcon />
+      </ListItemIcon>
+      <ListItemText primary="Label" />
+    </ListItemButton>
+    <ListItemButton>
+      <ListItemIcon>
+      <PentagonIcon />
+      </ListItemIcon>
+      <ListItemText primary="Label" />
     </ListItemButton>
   </React.Fragment>
 );

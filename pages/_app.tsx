@@ -19,12 +19,7 @@ function MyApp({ Component, pageProps }: AppProps<{ session: Session }>) {
        </SessionProvider>
     )
    } 
-
-  //  if(currentPath === '/register/SignUp') {
-  //   return(
-  //        <Component {...pageProps} />
-  //   )
-  //  } 
+  
 
   return (
     <SessionProvider session={pageProps.session}>

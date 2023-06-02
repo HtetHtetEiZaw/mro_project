@@ -113,13 +113,18 @@ const mdTheme = createTheme({
   },
   */
 });
+const appBar ={
+  color:'#ffffff',
+  backgroundColor: '#d4d5ff',
+}
+  
 
 type LayoutProps = Required<{
   readonly children: ReactElement;
 }>;
 
 export default function Layout({ children }: LayoutProps) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -128,7 +133,7 @@ export default function Layout({ children }: LayoutProps) {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open} >
+        <AppBar position="absolute" open={open} style={appBar}>
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
@@ -151,9 +156,9 @@ export default function Layout({ children }: LayoutProps) {
               variant="h6"
               color="inherit"
               noWrap
-              sx={{ flexGrow: 1 }}
+              sx={{ flexGrow: 1,color:'#190e47'}}
             >
-              Mro Practice
+              MRO Japan
             </Typography>
             <AccountInfo />
             {/* <IconButton color="inherit">
@@ -197,23 +202,23 @@ export default function Layout({ children }: LayoutProps) {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
+            {/* <Grid container spacing={1}> */}
               {/* Chart */}
-              <Grid item xs={12} md={8} lg={18}>
-                <Paper
+              {/* <Grid item xs={12} md={8} lg={18}> */}
+                {/* <Paper
                   sx={{
                     p: 2,
                     display: "flex",
                     flexDirection: "column",
                     height: 600,
                   }}
-                >
+                > */}
                   {children}
                   {/*<Chart />*/}
-                </Paper>
-              </Grid>
+                {/* </Paper> */}
+              {/* </Grid> */}
               {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
+              {/* <Grid item xs={12} md={4} lg={3}>
                 <Paper
                   sx={{
                     p: 2,
@@ -222,19 +227,19 @@ export default function Layout({ children }: LayoutProps) {
                     height: 140,
                   }}
                 >
-                  <span>deposits</span>
+                  <span>deposits</span> */}
                   {/*<Deposits />*/}
-                </Paper>
-              </Grid>
+                {/* </Paper>
+              </Grid> */}
               {/* Recent Orders */}
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <span>orders</span>
+                  <span>orders</span> */}
                   {/*<Orders />*/}
-                </Paper>
-              </Grid>
-            </Grid>
-            <Copyright sx={{ pt: 4 }} />
+                {/* </Paper>
+              </Grid> */}
+            {/* </Grid> */}
+            {/* <Copyright sx={{ pt: 4 }} /> */}
           </Container>
         </Box>
       </Box>

@@ -8,10 +8,21 @@ import { signOut } from 'next-auth/react';
 import Button from '@mui/material/Button';
 import { getSession } from 'next-auth/react';
 
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import SearchIcon from '@mui/icons-material/Search';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
+    const handleSearch = () => {
+      // Perform search functionality here
+    };
+
   return (
     <>
       <Head>
@@ -20,7 +31,7 @@ export default function Home() {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <main className={styles.main}>
+      {/* <main className={styles.main}>
         <Button
           onClick={() => signOut()}
           variant="contained"
@@ -35,14 +46,66 @@ export default function Home() {
             <code className={styles.code}>pages/index.tsx</code>
           </p>
           </div>
-          </main>
+          </main> */}
+          
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={8} lg={6}>
+              <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    // height: 55,
+                    borderRadius: '30px',
+                  }}
+                >
+                  {/* Hinted Search Text <SearchIcon /> */}
+                  <TextField 
+                    variant="standard"
+                    placeholder="Hinted Search Text"
+                    InputProps={{
+                      disableUnderline: true,
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={handleSearch}>
+                            <SearchIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Paper>
+                <Paper
+                  sx={{
+                    mt:2,
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 700,
+                  }}
+                >
+                  
+                </Paper>
+              </Grid>
+              <Grid item xs={12} md={8} lg={6}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 780,
+                  }}
+                >
+                </Paper>
+              </Grid>
+          </Grid>
           </>
           )
 };
 
 export async function getServerSideProps({ req }) {
   const session = await getSession({ req });
-
+  // console.log(session);
   if (!session) {
       return {
           redirect: {
